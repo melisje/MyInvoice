@@ -12,94 +12,111 @@
  */
 class Counters extends CActiveRecord
 {
-	/**
-	 * @return string the associated database table name
-	 */
-	public function tableName()
-	{
-		return 'tbl_Counters';
-	}
 
-	/**
-	 * @return array validation rules for model attributes.
-	 */
-	public function rules()
-	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
-		return array(
-			array('COUNTERID', 'required'),
-			array('VALUE, DIGITS', 'numerical', 'integerOnly'=>true),
-			array('COUNTERID', 'length', 'max'=>50),
-			array('PREFIX, SUFFIX', 'length', 'max'=>45),
-			// The following rule is used by search().
-			// @todo Please remove those attributes that should not be searched.
-			array('COUNTERID, VALUE, PREFIX, SUFFIX, DIGITS', 'safe', 'on'=>'search'),
-		);
-	}
+    /**
+     * @return string the associated database table name
+     */
+    public function tableName()
+    {
+        return 'tbl_Counters';
+    }
 
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-		);
-	}
+    /**
+     * @return array validation rules for model attributes.
+     */
+    public function rules()
+    {
+        // NOTE: you should only define rules for those attributes that
+        // will receive user inputs.
+        return array(
+            array('COUNTERID', 'required'),
+            array('VALUE, DIGITS', 'numerical', 'integerOnly' => true),
+            array('COUNTERID', 'length', 'max' => 50),
+            array('PREFIX, SUFFIX', 'length', 'max' => 45),
+            // The following rule is used by search().
+            // @todo Please remove those attributes that should not be searched.
+            array('COUNTERID, VALUE, PREFIX, SUFFIX, DIGITS', 'safe', 'on' => 'search'),
+        );
+    }
 
-	/**
-	 * @return array customized attribute labels (name=>label)
-	 */
-	public function attributeLabels()
-	{
-		return array(
-			'COUNTERID' => 'Counterid',
-			'VALUE' => 'Value',
-			'PREFIX' => 'Prefix',
-			'SUFFIX' => 'Suffix',
-			'DIGITS' => 'Digits',
-		);
-	}
+    /**
+     * @return array relational rules.
+     */
+    public function relations()
+    {
+        // NOTE: you may need to adjust the relation name and the related
+        // class name for the relations automatically generated below.
+        return array(
+        );
+    }
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
+    /**
+     * @return array customized attribute labels (name=>label)
+     */
+    public function attributeLabels()
+    {
+        return array(
+            'COUNTERID' => 'Counterid',
+            'VALUE' => 'Value',
+            'PREFIX' => 'Prefix',
+            'SUFFIX' => 'Suffix',
+            'DIGITS' => 'Digits',
+        );
+    }
 
-		$criteria=new CDbCriteria;
+    /**
+     * Retrieves a list of models based on the current search/filter conditions.
+     *
+     * Typical usecase:
+     * - Initialize the model fields with values from filter form.
+     * - Execute this method to get CActiveDataProvider instance which will filter
+     * models according to data in model fields.
+     * - Pass data provider to CGridView, CListView or any similar widget.
+     *
+     * @return CActiveDataProvider the data provider that can return the models
+     * based on the search/filter conditions.
+     */
+    public function search()
+    {
+        // @todo Please modify the following code to remove attributes that should not be searched.
 
-		$criteria->compare('COUNTERID',$this->COUNTERID,true);
-		$criteria->compare('VALUE',$this->VALUE);
-		$criteria->compare('PREFIX',$this->PREFIX,true);
-		$criteria->compare('SUFFIX',$this->SUFFIX,true);
-		$criteria->compare('DIGITS',$this->DIGITS);
+        $criteria = new CDbCriteria;
 
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
-	}
+        $criteria->compare('COUNTERID', $this->COUNTERID, true);
+        $criteria->compare('VALUE', $this->VALUE);
+        $criteria->compare('PREFIX', $this->PREFIX, true);
+        $criteria->compare('SUFFIX', $this->SUFFIX, true);
+        $criteria->compare('DIGITS', $this->DIGITS);
 
-	/**
-	 * Returns the static model of the specified AR class.
-	 * Please note that you should have this exact method in all your CActiveRecord descendants!
-	 * @param string $className active record class name.
-	 * @return Counters the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{
-		return parent::model($className);
-	}
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+        ));
+    }
+
+    /**
+     * Returns the static model of the specified AR class.
+     * Please note that you should have this exact method in all your CActiveRecord descendants!
+     * @param string $className active record class name.
+     * @return Counters the static model class
+     */
+    public static function model($className = __CLASS__)
+    {
+        return parent::model($className);
+    }
+
+    /**
+     * returns the next value of this counter, inclusive PREFEX and SUFFIX 
+     * and the nr of digits as defined for this counter.
+     * The new value is also saved in the database.
+     * @return String
+     */
+    public function getNextValue()
+    {
+        $this->VALUE++;
+        $this->saveAttributes(array('VALUE'));
+
+        $strval = str_pad($this->VALUE, $this->DIGITS, '0', STR_PAD_LEFT);
+        return $this->PREFIX . $strval . $this->SUFFIX;
+    }
+
 }
