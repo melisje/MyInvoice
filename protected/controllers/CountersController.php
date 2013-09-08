@@ -142,6 +142,13 @@ class CountersController extends Controller
 			'model'=>$model,
 		));
 	}
+        
+        public function actionNextValue($id)
+        {
+            $model=$this->loadModel($id); 
+            
+            return $model->getNextValue();            
+        }
 
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
