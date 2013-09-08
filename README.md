@@ -1,0 +1,4 @@
+MyInvoice
+=========
+
+Invoicing application
