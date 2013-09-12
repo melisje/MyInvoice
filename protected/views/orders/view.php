@@ -13,6 +13,7 @@ $this->menu=array(
 	array('label'=>'Update Orders', 'url'=>array('update', 'id'=>$model->ORDER_ID)),
 	array('label'=>'Delete Orders', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->ORDER_ID),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Manage Orders', 'url'=>array('admin')),
+	array('label'=>'Create Invoice', 'url'=>array('invoices/InvoiceFromOrder', 'orderid'=>$model->ORDER_ID)),
 );
 ?>
 
